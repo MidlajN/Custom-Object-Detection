@@ -6,8 +6,13 @@ import glob, random
 class DatasetCreation():
     def __init__(self):
         self.cap = cv2.VideoCapture(0)
-        self.training_dir = 'yolov5/data/train/'
-        self.validation_dir = 'yolov5/data/val/'
+        self.yolov5_path = 'yolov5'
+        if not os.path.exists(self.yolov5_path + '/train.py'):
+            shutil.rmtree(self.yolov5_path)
+            print('---------- YOU HAVE NOT CLONED THE YOLOv5 REPOSITORY ---------- \nEXECUTING COMMAND : ')
+            os.system('git clone https://github.com/ultralytics/yolov5')
+        self.train_dir = 'yolov5/data/train/'
+        self.valid_dir = 'yolov5/data/val/'
         self.tracker = cv2.TrackerMIL_create()
 
     def remove_files(self, dir):
@@ -15,26 +20,26 @@ class DatasetCreation():
         [os.remove(file) for file in files]
     
     def dataset_dir(self):
-        training_img_dir = os.path.join(self.training_dir, 'images')
-        validation_img_dir = os.path.join(self.validation_dir, 'images')
-        training_label_dir = os.path.join(self.training_dir, 'labels')
-        validation_label_dir = os.path.join(self.validation_dir, 'labels')
+        train_img_dir = os.path.join(self.train_dir, 'images')
+        valid_img_dir = os.path.join(self.valid_dir, 'images')
+        train_label_dir = os.path.join(self.train_dir, 'labels')
+        valid_label_dir = os.path.join(self.valid_dir, 'labels')
 
-        os.makedirs(training_img_dir, exist_ok=True)
-        os.makedirs(validation_img_dir, exist_ok=True)
-        os.makedirs(training_label_dir, exist_ok=True)
-        os.makedirs(validation_label_dir, exist_ok=True)
+        os.makedirs(train_img_dir, exist_ok=True)
+        os.makedirs(valid_img_dir, exist_ok=True)
+        os.makedirs(train_label_dir, exist_ok=True)
+        os.makedirs(valid_label_dir, exist_ok=True)
 
-        self.remove_files(training_img_dir)
-        self.remove_files(validation_img_dir)
-        self.remove_files(training_label_dir)
-        self.remove_files(validation_label_dir)
+        self.remove_files(train_img_dir)
+        self.remove_files(valid_img_dir)
+        self.remove_files(train_label_dir)
+        self.remove_files(valid_label_dir)
         
         return (
-            training_img_dir,
-            validation_img_dir,
-            training_label_dir,
-            validation_label_dir
+            train_img_dir,
+            valid_img_dir,
+            train_label_dir,
+            valid_label_dir
         )
 
 
